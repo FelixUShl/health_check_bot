@@ -57,11 +57,10 @@ def add_comment_to_row_journal(comment, row_id):
                                     row_id = ?''', (comment, row_id))
 
 
-def get_list_from_journal(telegram_user_id, time_from=0, time_to='now'):
-    if time_to == 'now':
+def get_list_from_journal(telegram_user_id, time_from=0, time_to=0):
+    if time_to == 0:
         time_to = int(time.time())
     user_id = get_user_id(telegram_user_id)
-    res = list()
     with sqlite3.connect('database/appdatabase.db') as con:
         cursor = con.cursor()
         cursor.execute('''SELECT
@@ -96,6 +95,7 @@ def get_list_users_telegram_tokens():
         for row in cursor.fetchall():
             result.append(row[0])
     return result
+
 
 def get_list_feelings():
     with sqlite3.connect('database/appdatabase.db') as con:

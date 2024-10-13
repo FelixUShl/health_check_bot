@@ -4,10 +4,8 @@ import sqlite3
 import asyncio
 import dotenv
 
-import bot
-import db_io
 from configs.log_conf import configure_logging
-from bot import start
+from bot import start_
 
 
 def init_app():
@@ -70,4 +68,4 @@ if __name__ == '__main__':
     # import pprint
     # pprint.pprint(db_io.get_list_from_journal(os.getenv('TELEGRAM_ID'), 0, 'now'))
     # db_io.add_comment_to_row_journal('Комментарий1111 для записи в журнал', 1)
-    asyncio.run(bot.start_())
+    asyncio.run(start_())
