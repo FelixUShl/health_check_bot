@@ -47,10 +47,10 @@ async def set_period_journal_to(message: Message, state: FSMContext):
         await message.answer('Необходимо указать конечную дату дд:мм:гг\nили 0 если по сейчас\n/cancel для отмены')
     elif message.text == '0':
         await state.update_data(period_from=0)
+        await message.answer('Необходимо указать конечную дату дд:мм:гг\nили 0 если по сейчас\n/cancel для отмены')
     else:
         await message.answer('Необходимо указать стартовую дату "дд мм гг"\nили 0 для вывода с самого начала'
                              '\n/cancel для отмены')
-        await message.answer('Необходимо указать конечную дату дд:мм:гг\nили 0 если по сейчас\n/cancel для отмены')
         return
     await state.set_state(ReadJournal.period_to)
     logger.debug(await state.get_data())
@@ -72,7 +72,7 @@ async def set_period_journal(message: Message, state: FSMContext):
     await message.answer('За данный период получены следующие записи:')
     for row in rows:
         time_local = time.localtime(row[0])
-        answer = f'{time.strftime('%d.%m.%Y г. %H:%M', time_local)}'
+        answer = f"{time.strftime('%d.%m.%Y г. %H:%M', time_local)}"
         answer += f', {row[1]}'
         if row[2] != '':
             answer += f',\nКомментарий: {row[2]}'

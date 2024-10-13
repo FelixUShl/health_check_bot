@@ -25,4 +25,4 @@ async def not_approved_user(message: Message):
 
 @router.message(Command('start'), StateFilter(default_state))
 async def start(message: Message):
-    await message.answer('Привет!\n/new_row\n/read_journal')
+    await message.answer('Привет!\n/new_row\n/read_journal\n/new_feeling')

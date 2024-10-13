@@ -36,8 +36,7 @@ def add_new_row_journal(telegram_user_id, feeling_name):
 def add_new_type_feeling(new_feeling_name):
     with sqlite3.connect('database/appdatabase.db') as con:
         cursor = con.cursor()
-        cursor.execute('''UPDATE
-                                    INSERT 
+        cursor.execute('''INSERT 
                                     INTO
                                         feelings
                                         (feeling_name)                                     
@@ -108,3 +107,7 @@ def get_list_feelings():
         for row in cursor.fetchall():
             result.append(row[0])
     return result
+
+
+if __name__ == '__main__':
+    add_new_type_feeling('Отлично')

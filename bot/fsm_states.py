@@ -10,3 +10,8 @@ class WriteJournal(StatesGroup):
 class ReadJournal(StatesGroup):
     period_from = State()  # Сотсояние выставляемое для ожидания ввода начальной даты
     period_to = State()  # Сотсояние когда период выставлен
+
+
+class NewFeeling(StatesGroup):
+    new_feeling = State()
+    set_feeling = State()
