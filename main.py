@@ -4,7 +4,7 @@ import dotenv
 
 from configs.log_conf import configure_logging
 from init_app import init_app
-# from bot import start_
+from bot import start_
 
 
 def main():
@@ -19,4 +19,4 @@ if __name__ == '__main__':
     # import pprint
     # pprint.pprint(db_io.get_list_from_journal(os.getenv('TELEGRAM_ID'), 0, 'now'))
     # db_io.add_comment_to_row_journal('Комментарий1111 для записи в журнал', 1)
-    # asyncio.run(start_())
+    asyncio.run(start_())

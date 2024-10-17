@@ -21,22 +21,37 @@ def init_app():
             cursor.execute('''CREATE TABLE IF NOT EXISTS users
                             (user_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 
                             user_name TEXT NOT NULL,
-                            user_telegram_id INTEGER NOT NULL);
+                            user_telegram_id INTEGER NOT NULL)
                             ''')
 
-            cursor.execute('''CREATE TABLE journal (
-                            row_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+            cursor.execute(f'''CREATE TABLE u_{admin_id}_journal
+                            (row_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                            category_feeling_id INTEGER NOT NULL,
+                            feeling_location_id INTEGER NOT NULL,
                             feeling_id INTEGER NOT NULL,
-                            user_id INTEGER NOT NULL,
+                            feeling_level_id INTEGER NOT NULL,
                             row_time TIMESTAMP NOT NULL,
-                            comment TEXT
-                             );''')
+                            comment TEXT);''')
 
-            cursor.execute('''CREATE TABLE IF NOT EXISTS feelings (
-                            feeling_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-                            feeling_name TEXT NOT NULL);''')
+            cursor.execute(f'''CREATE TABLE IF NOT EXISTS u_{admin_id}_feelings_level (
+                            feelings_level_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                            feelings_level_name TEXT NOT NULL);''')
 
-            cursor.execute('''INSERT INTO feelings (feeling_name)
+
+            cursor.execute(f'''CREATE TABLE IF NOT EXISTS u_{admin_id}_feelings_location (
+                                        feeling_location_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                                        feeling_location_name TEXT NOT NULL);''')
+
+
+            cursor.execute(f'''CREATE TABLE IF NOT EXISTS u_{admin_id}_feelings (
+                                        feeling_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                                        feeling_name TEXT NOT NULL);''')
+
+            cursor.execute(f'''CREATE TABLE IF NOT EXISTS u_{admin_id}_categories_feeling (
+                                        category_feeling_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                                        category_feeling_name TEXT NOT NULL);''')
+
+            cursor.execute(f'''INSERT INTO u_{admin_id}_categories_feeling (category_feeling_name)
                             VALUES ('Болей нет');
                             ''')
 
@@ -55,3 +70,5 @@ def init_app():
             ''')
             logging.info('Admin user row added into database')
 
+if __name__ == '__main__':
+    init_app()
