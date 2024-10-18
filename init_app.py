@@ -28,7 +28,7 @@ def init_app():
                             (row_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
                             user_id INTEGER NOT NULL,
                             category_feeling_id INTEGER NOT NULL,
-                            feeling_location_id INTEGER NOT NULL,
+                            feeling_location_id ARRAY INTEGER NOT NULL,
                             feeling_id INTEGER NOT NULL,
                             feeling_level_id INTEGER NOT NULL,
                             row_time TIMESTAMP NOT NULL,
@@ -80,7 +80,7 @@ def init_app():
             user_id = cursor.fetchone()[0]
             cursor.execute(f'''INSERT INTO categories_feeling (category_feeling_name, user_id)
                         VALUES ('Болей нет', ?)
-                            ''', (admin_id, ))
+                            ''', (user_id, ))
 
 if __name__ == '__main__':
     init_app()
