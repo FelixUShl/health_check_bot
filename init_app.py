@@ -3,7 +3,6 @@ import sqlite3
 import logging
 import dotenv
 
-
 logger = logging.getLogger(__name__)
 dotenv.load_dotenv('configs/.env')
 
@@ -18,13 +17,15 @@ def init_app():
             logging.info('Path to database created')
         with sqlite3.connect('database/appdatabase.db') as conn:
             cursor = conn.cursor()
+            # ================ ТАБЛИЦА С ПОЛЬЗВАТЕЛЯМИ И TLG ID ================
             cursor.execute('''CREATE TABLE IF NOT EXISTS users
                             (user_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 
                             user_name TEXT NOT NULL,
                             user_telegram_id INTEGER NOT NULL)
                             ''')
 
-            cursor.execute(f'''CREATE TABLE journal
+            # ================ ЖУРНАЛ ЗАПИСЕЙ ================
+            cursor.execute('''CREATE TABLE journal
                             (row_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
                             user_id INTEGER NOT NULL,
                             category_feeling_id INTEGER NOT NULL,
@@ -34,18 +35,18 @@ def init_app():
                             row_time TIMESTAMP NOT NULL,
                             comment TEXT);''')
 
-            cursor.execute(f'''CREATE TABLE IF NOT EXISTS feelings_level (
+            # ================ ТАБЛИЦА С УРОВНЕМ СИЛЫ ОЩУЩЕНИЙ ================
+            cursor.execute('''CREATE TABLE IF NOT EXISTS feelings_level (
                                 feelings_level_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-                                feelings_level_name TEXT NOT NULL,
-                                user_id INTEGER NOT NULL);''')
+                                feelings_level_name TEXT NOT NULL);''')
 
-
+            # ================ ТАБЛИЦА С УКАЗАНИЕМ ЛОКАЛИЗАЦИИ ОЩУЩЕНИЙ ================
             cursor.execute(f'''CREATE TABLE IF NOT EXISTS feelings_location (
                                 feeling_location_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
                                 feeling_location_name TEXT NOT NULL,
                                 user_id INTEGER NOT NULL);''')
 
-
+            # ================ ТАБЛИЦА С САМИМИ ОЩУЩЕНИЯМИ ================
             cursor.execute(f'''CREATE TABLE IF NOT EXISTS feelings (
                                 feeling_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
                                 feeling_name TEXT NOT NULL,
@@ -56,15 +57,13 @@ def init_app():
                                 category_feeling_name TEXT NOT NULL,
                                 user_id INTEGER NOT NULL);''')
 
-
-
             logging.info('Database created')
     with sqlite3.connect('database/appdatabase.db') as conn:
         cursor = conn.cursor()
         cursor.execute('''SELECT user_id
                             FROM users
                             WHERE user_telegram_id = ?
-                            ''', (admin_id, ))
+                            ''', (admin_id,))
         if cursor.fetchone() is None:
             print(cursor.fetchone())
             cursor.execute('''
@@ -76,11 +75,16 @@ def init_app():
                     SELECT user_id
                     FROM users
                     WHERE user_telegram_id = ?
-                            ''', (admin_id, ))
+                            ''', (admin_id,))
             user_id = cursor.fetchone()[0]
             cursor.execute(f'''INSERT INTO categories_feeling (category_feeling_name, user_id)
                         VALUES ('Болей нет', ?)
-                            ''', (user_id, ))
+                            ''', (user_id,))
+            cursor.execute(f'''INSERT INTO feelings_level (feelings_level_name)
+                                    VALUES ('Боли нет'), ('Слабая боль'),('Терпимая боль'),
+                                    ('Сильная боль'),('ВЫЗЫВАЙТЕ СКОРУЮ!!!')
+                                        ''' )
+
 
 if __name__ == '__main__':
     init_app()
