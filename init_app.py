@@ -24,8 +24,9 @@ def init_app():
                             user_telegram_id INTEGER NOT NULL)
                             ''')
 
-            cursor.execute(f'''CREATE TABLE u_{admin_id}_journal
+            cursor.execute(f'''CREATE TABLE journal
                             (row_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                            user_id INTEGER NOT NULL,
                             category_feeling_id INTEGER NOT NULL,
                             feeling_location_id INTEGER NOT NULL,
                             feeling_id INTEGER NOT NULL,
@@ -33,42 +34,53 @@ def init_app():
                             row_time TIMESTAMP NOT NULL,
                             comment TEXT);''')
 
-            cursor.execute(f'''CREATE TABLE IF NOT EXISTS u_{admin_id}_feelings_level (
-                            feelings_level_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-                            feelings_level_name TEXT NOT NULL);''')
+            cursor.execute(f'''CREATE TABLE IF NOT EXISTS feelings_level (
+                                feelings_level_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                                feelings_level_name TEXT NOT NULL,
+                                user_id INTEGER NOT NULL);''')
 
 
-            cursor.execute(f'''CREATE TABLE IF NOT EXISTS u_{admin_id}_feelings_location (
-                                        feeling_location_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-                                        feeling_location_name TEXT NOT NULL);''')
+            cursor.execute(f'''CREATE TABLE IF NOT EXISTS feelings_location (
+                                feeling_location_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                                feeling_location_name TEXT NOT NULL,
+                                user_id INTEGER NOT NULL);''')
 
 
-            cursor.execute(f'''CREATE TABLE IF NOT EXISTS u_{admin_id}_feelings (
-                                        feeling_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-                                        feeling_name TEXT NOT NULL);''')
+            cursor.execute(f'''CREATE TABLE IF NOT EXISTS feelings (
+                                feeling_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                                feeling_name TEXT NOT NULL,
+                                user_id INTEGER NOT NULL);''')
 
-            cursor.execute(f'''CREATE TABLE IF NOT EXISTS u_{admin_id}_categories_feeling (
-                                        category_feeling_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-                                        category_feeling_name TEXT NOT NULL);''')
+            cursor.execute(f'''CREATE TABLE IF NOT EXISTS categories_feeling (
+                                category_feeling_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                                category_feeling_name TEXT NOT NULL,
+                                user_id INTEGER NOT NULL);''')
 
-            cursor.execute(f'''INSERT INTO u_{admin_id}_categories_feeling (category_feeling_name)
-                            VALUES ('Болей нет');
-                            ''')
+
 
             logging.info('Database created')
     with sqlite3.connect('database/appdatabase.db') as conn:
         cursor = conn.cursor()
-        cursor.execute(f'''
-        SELECT user_telegram_id
-        FROM users
-        WHERE user_telegram_id = {admin_id}
-        ''')
+        cursor.execute('''SELECT user_id
+                            FROM users
+                            WHERE user_telegram_id = ?
+                            ''', (admin_id, ))
         if cursor.fetchone() is None:
-            cursor.execute(f'''
+            print(cursor.fetchone())
+            cursor.execute('''
             INSERT INTO users (user_name, user_telegram_id)
-            VALUES ('admin', {admin_id})
-            ''')
+            VALUES ('admin', ?)
+            ''', (admin_id,))
             logging.info('Admin user row added into database')
+            cursor.execute('''
+                    SELECT user_id
+                    FROM users
+                    WHERE user_telegram_id = ?
+                            ''', (admin_id, ))
+            user_id = cursor.fetchone()[0]
+            cursor.execute(f'''INSERT INTO categories_feeling (category_feeling_name, user_id)
+                        VALUES ('Болей нет', ?)
+                            ''', (admin_id, ))
 
 if __name__ == '__main__':
     init_app()
