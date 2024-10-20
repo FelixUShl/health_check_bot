@@ -34,7 +34,7 @@ def generate_answer_res(result):
     row = row[0]
     location = ', '.join(row[3])
     time_local = time.localtime(row[0])
-    answer = (f'В {time.strftime('%H:%M %d.%m.%Y г.', time_local)} была добавлена следующая запись:\n'
+    answer = (f"В {time.strftime('%H:%M %d.%m.%Y г.', time_local)} была добавлена следующая запись:\n"
               f'Почувствовал: {row[1]}\n'
               f'В виде: {row[2]}\n'
               f'В районе: {location}\n'
