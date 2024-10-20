@@ -6,6 +6,7 @@ import logging
 
 import db_io
 from bot.init_bot import bot, admin_id
+from bot.keyboards import start_keyboard
 
 logger = logging.getLogger(__name__)
 
@@ -25,4 +26,4 @@ async def not_approved_user(message: Message):
 
 @router.message(Command('start'), StateFilter(default_state))
 async def start(message: Message):
-    await message.answer('Привет!\n/new_row\n/read_journal\n/new_feeling')
+    await message.answer('Привет!', reply_markup=start_keyboard)

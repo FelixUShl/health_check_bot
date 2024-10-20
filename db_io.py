@@ -39,6 +39,7 @@ def add_new_row_journal(telegram_user_id: int, new_data: RowData):
                                         new_data.row_time,
                                         new_data.comment
                                       ))
+        return cursor.lastrowid
 
 
 def get_user_id(telegram_user_id):
@@ -216,4 +217,4 @@ if __name__ == '__main__':
 
     # print(row_data)
     # add_new_row_journal(987772120, row_data)
-    print(get_list_feelings(987772120))
+    print(get_list_categories_feeling(987772120))
