@@ -12,7 +12,6 @@ logger = logging.getLogger(__name__)
 
 router = Router()
 
-
 @router.message(~F.from_user.id.in_(db_io.get_list_users_telegram_tokens()))
 async def not_approved_user(message: Message):
     await message.answer('Вы не авторизованы!')
@@ -26,4 +25,9 @@ async def not_approved_user(message: Message):
 
 @router.message(Command('start'), StateFilter(default_state))
 async def start(message: Message):
-    await message.answer('Привет!', reply_markup=start_keyboard)
+    await message.answer(f'Привет!,\n', reply_markup=start_keyboard)
+
+
+@router.message(F.from_user.id == admin_id, F.text.startswith('/add_user'))
+async def add_user(message: Message):
+    await message.answer(message.text)

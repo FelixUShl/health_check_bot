@@ -14,5 +14,5 @@ logger.info(f"Подготовка к запуску бота с id {os.getenv('
 memory = MemoryStorage()
 logger.info('Выделена память под FSM')
 dp = Dispatcher(memory=memory)
-admin_id = os.getenv('TELEGRAM_ID')
+admin_id = int(os.getenv('TELEGRAM_ID'))
 logger.info(f'Пользователь телеграм с ID {admin_id} назначен администратором бота')
